@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,7 @@ Route::post('/profile-store', [ProfileController::class, 'profileStore'])->name(
 Route::post('/password-store', [ProfileController::class, 'passwordStore'])->name('password-store');
 Route::post('/foto-store', [ProfileController::class, 'fotoStore'])->name('foto-store');
 Route::get('/del-foto', [ProfileController::class, 'deleteFoto'])->name('del-foto');
+
+// user
+Route::resource('user', UserController::class);
+Route::get('/list-user', [UserController::class, 'list'])->name('list-user');
