@@ -4,82 +4,75 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $data['title'] = 'Role';
+        return view('admin.role.index',$data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function listRole(){
+        $data = Role::get();
+        return DataTables::of($data)
+        ->addIndexColumn()
+        ->addColumn('aksi', function ($data) {
+            return '
+                <a href="javascript:void(0)" id="btn-delete" onclick="editData('.$data->id.')" class="btn btn-sm btn-warning" data-id="' .$data->id .'" title="Edit Data"><i class="bi bi-pencil-fill"></i></a>
+                <a href="javascript:void(0)" id="btn-delete" onclick="deleteData('.$data->id.')" class="btn btn-sm btn-danger" data-id="' .$data->id .'" title="Hapus Data"><i class="bi bi-trash-fill"></i></a>
+            ';
+        })
+        ->rawColumns(['aksi'])
+        ->make(true);
+    }
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'role' => 'required',
+        ], [
+            'role.required' => 'Role tidak boleh kosong!',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()]);
+        } else {
+            if($request->id == null){
+                Role::create(['role' => $request->role]);
+            }else{
+                Role::where('id',$request->id)->update(['role' => $request->role]);
+            }
+            return response()->json([ 'success' => 'Berhasil menyimpan data.']);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function show(Role $role)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Role $role)
     {
-        //
+        $data = Role::find($role);
+        return response()->json($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Role $role)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Role $role)
     {
-        //
+        Role::find($role->id)->delete();
+        return response()->json(['success' => 'berhasil menghapus data']);
     }
 }
