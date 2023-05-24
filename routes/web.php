@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -21,10 +22,14 @@ Route::post('/password-store', [ProfileController::class, 'passwordStore'])->nam
 Route::post('/foto-store', [ProfileController::class, 'fotoStore'])->name('foto-store');
 Route::get('/del-foto', [ProfileController::class, 'deleteFoto'])->name('del-foto');
 
-// user
+// master user
 Route::resource('user', UserController::class);
 Route::get('/list-user', [UserController::class, 'list'])->name('list-user');
 
 // master role
 Route::resource('role', RoleController::class);
 Route::get('/list-role', [RoleController::class, 'listRole'])->name('list-role');
+
+// master project
+Route::resource('project', ProjectController::class);
+Route::get('/list-project', [ProjectController::class, 'listproject'])->name('list-project');

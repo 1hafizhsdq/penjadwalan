@@ -23,6 +23,11 @@
                             <i class="bi bi-circle"></i><span>Role</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="nav-link {{ ($title == 'Project') ? '' : 'collapsed' }}" href="{{ url('project') }}">
+                            <i class="bi bi-circle"></i><span>Project</span>
+                        </a>
+                    </li>
                 </ul>
             </li><!-- End Components Nav -->
         @endif
