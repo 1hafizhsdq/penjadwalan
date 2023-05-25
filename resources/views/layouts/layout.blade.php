@@ -39,6 +39,9 @@
     <!-- Template Main CSS File -->
     <link href="{{asset('niceadmin')}}/assets/css/style.css" rel="stylesheet">
 
+    {{-- fullcalendar --}}
+    <link rel="stylesheet" href="{{asset('fullcalendar/')}}/fullcalendar.css" />
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @stack('css')
