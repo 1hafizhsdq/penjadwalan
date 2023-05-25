@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -33,3 +34,8 @@ Route::get('/list-role', [RoleController::class, 'listRole'])->name('list-role')
 // master project
 Route::resource('project', ProjectController::class);
 Route::get('/list-project', [ProjectController::class, 'listproject'])->name('list-project');
+
+// schedule
+Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule');
+Route::get('/list-schedule', [ScheduleController::class, 'listschedule'])->name('list-schedule');
+Route::post('/schedule', [ScheduleController::class, 'store'])->name('schedule.store');

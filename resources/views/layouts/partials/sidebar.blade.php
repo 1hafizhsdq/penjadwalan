@@ -31,5 +31,11 @@
                 </ul>
             </li><!-- End Components Nav -->
         @endif
+        <li class="nav-item">
+            <a class="nav-link {{ ($title == 'Jadwal Pekerjaan') ? '' : 'collapsed' }}" href="{{ url('schedule') }}">
+                <i class="bi bi-calendar-check"></i>
+                <span>Jadwal Pekerjaan</span>
+            </a>
+        </li>
     </ul>
 </aside>
