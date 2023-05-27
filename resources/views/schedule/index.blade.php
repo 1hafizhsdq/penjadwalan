@@ -51,12 +51,12 @@
         },
         columns: [
             { data: 'DT_RowIndex', class: 'text-center'},
-            { data: 'project_id'},
+            { data: 'project.project'},
             { data: 'start_date'},
             { data: 'due_date'},
             { data: 'end_date'},
             { data: 'status'},
-            { data: 'user_id'},
+            { data: 'user.name'},
             { data: 'information'},
             { data: 'aksi', class: 'text-center'}
         ]
@@ -112,22 +112,44 @@
 
             },
         });
-    });
-
-    function editData(id) {
+    }).on('click','#btn-edit', function(){
         var form = $('#form-schedule');
+        var id = $(this).data('id');
         $.ajax({
-            url : 'schedule/' + id + '/edit',
+            url : 'schedule/edit',
             type: 'GET',
+            data: {id:id},
             success:function(result){
-                form.find('#id').val(result[0].id)
-                form.find('#schedule').val(result[0].schedule)
+                form.find('#id').val(result.id)
+                $("div.selectIngProject select").val(result.project_id).change();
+                $("div.selectIngUser select").val(result.user_id).change();
+                form.find('#start_date').val(result.start_date)
+                form.find('#due_date').val(result.due_date)
                 $('#modal-schedule').modal('show');
-                $('.modal-title').html('Form Edit Menu');
+                $('.modal-title').html('Form Edit Jadwal Pekerjaan');
                 $('#sv').html('Update');
             }
         });
-    }
+    });
+
+    // function editData(id) {
+    //     var form = $('#form-schedule');
+    //     $.ajax({
+    //         url : 'schedule/edit',
+    //         type: 'GET',
+    //         date: id,
+    //         success:function(result){
+    //             form.find('#id').val(result[0].id)
+    //             form.find('#project_id').val(result[0].project_id)
+    //             form.find('#start_date').val(result[0].start_date)
+    //             form.find('#due_date').val(result[0].due_date)
+    //             form.find('#user_id').val(result[0].user_id)
+    //             $('#modal-schedule').modal('show');
+    //             $('.modal-title').html('Form Edit Jadwal Pekerjaan');
+    //             $('#sv').html('Update');
+    //         }
+    //     });
+    // }
 
     function deleteData(id) {
         Swal.fire({

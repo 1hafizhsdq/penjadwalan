@@ -17,13 +17,22 @@ class Schedule extends Model
     ];
 
     protected $keyType = 'string';
-
+    
     public $incrementing = false;
+    protected $primaryKey = 'id';
 
     public static function boot() {
         parent::boot();
         static::creating(function($obj){
             $obj->id = RamseyUuid::uuid4()->toString();
         });
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class,'user_id');
+    }
+    
+    public function project(){
+        return $this->belongsTo(Project::class,'project_id');
     }
 }

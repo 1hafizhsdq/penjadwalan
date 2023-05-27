@@ -20,13 +20,12 @@ class ScheduleController extends Controller
     }
 
     public function listSchedule(){
-        $data = Schedule::get();
+        $data = Schedule::with('project','user')->get();
         return DataTables::of($data)
         ->addIndexColumn()
         ->addColumn('aksi', function ($data) {
             return '
-                <a href="javascript:void(0)" id="btn-delete" onclick="editData('.$data->id.')" class="btn btn-sm btn-warning" data-id="' .$data->id .'" title="Edit Data"><i class="bi bi-pencil-fill"></i></a>
-                <a href="javascript:void(0)" id="btn-delete" onclick="deleteData('.$data->id.')" class="btn btn-sm btn-danger" data-id="' .$data->id .'" title="Hapus Data"><i class="bi bi-trash-fill"></i></a>
+                <a href="javascript:void(0)" id="btn-edit" class="btn btn-sm btn-warning" data-id="' .$data->id .'" title="Edit Data"><i class="bi bi-pencil-fill"></i></a>
             ';
         })
         ->rawColumns(['aksi'])
@@ -66,5 +65,11 @@ class ScheduleController extends Controller
             }
             return response()->json([ 'success' => 'Berhasil menyimpan data.']);
         }
+    }
+
+    public function edit(Request $request)
+    {
+        $data = Schedule::find($request->id);
+        return response()->json($data);
     }
 }

@@ -37,5 +37,6 @@ Route::get('/list-project', [ProjectController::class, 'listproject'])->name('li
 
 // schedule
 Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule');
+Route::get('/schedule/edit', [ScheduleController::class, 'edit'])->name('schedule.edit');
 Route::get('/list-schedule', [ScheduleController::class, 'listschedule'])->name('list-schedule');
 Route::post('/schedule', [ScheduleController::class, 'store'])->name('schedule.store');
