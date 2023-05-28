@@ -7,6 +7,7 @@ use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -21,7 +22,13 @@ class ScheduleController extends Controller
     }
 
     public function listSchedule(){
-        $data = Schedule::with('project','user')->orderBy('start_date','desc')->get();
+        if(Auth::user()->role_id == 1){
+            $schedule = Schedule::with('project','user');
+        }else{
+            $schedule = Schedule::with('project','user')->where('user_id',Auth::user()->id);
+        }
+        $data = $schedule->orderBy('start_date','desc')->get();
+        
         return DataTables::of($data)
         ->addIndexColumn()
         ->addColumn('aksi', function ($data) {
@@ -107,7 +114,11 @@ class ScheduleController extends Controller
 
     public function done(Request $request)
     {
-        $data = Schedule::find($request->id)->update(['status' => 'SELESAI', 'end_date' => date('Y-m-d')]);
+        Schedule::find($request->uuid)->update([
+            'status' => 'SELESAI', 
+            'end_date' => date('Y-m-d'),
+            'information' => $request->information
+        ]);
         return response()->json([ 'success' => 'Berhasil menyimpan data.']);
     }
 }

@@ -12,8 +12,10 @@
         <div class="col-lg-12">
 
             <div class="card">
-                <div class="card-body">
-                    <button type="button" class="btn btn-primary mt-4 mb-4" id="add"><i class="bi bi-plus"></i> Tambah Schedule</button>
+                <div class="card-body p-3">
+                    @if (Auth::user()->role_id == 1)
+                        <button type="button" class="btn btn-primary mt-4 mb-4" id="add"><i class="bi bi-plus"></i> Tambah Schedule</button>
+                    @endif
                     <table class="table" id="datatable">
                         <thead>
                             <tr>
@@ -22,7 +24,6 @@
                                 <th scope="col">Tanggal Mulai</th>
                                 <th scope="col">Deadline</th>
                                 <th scope="col">Tanggal Selesai</th>
-                                <th scope="col">Status</th>
                                 <th scope="col">Engineer</th>
                                 <th scope="col">Keterangan</th>
                                 <th scope="col" width="20%">Aksi</th>
@@ -37,6 +38,7 @@
         </div>
     </div>
     @includeIf('schedule.form')
+    @includeIf('schedule.form-done')
 </section>
 @endsection
 
@@ -55,7 +57,6 @@
             { data: 'start_date'},
             { data: 'due_date'},
             { data: 'end_date'},
-            { data: 'status'},
             { data: 'user.name'},
             { data: 'information'},
             { data: 'aksi', class: 'text-center'}
@@ -131,15 +132,52 @@
             }
         });
     }).on('click','#btn-done', function(){
-        var id = $(this).data('id');
-        $.ajax({
-            url : 'schedule/done',
-            type: 'GET',
-            data: {id:id},
-            success:function(result){
-                $('#datatable').DataTable().ajax.reload();
-                successMsg(result.success)
+        $('#form-done').find('input').val('');
+        $('#uuid').val($(this).data('id'));
+        $('#modal-done').modal('show');
+        $('.modal-title').html('Pekerjaan Selesai');
+        $('#sv-done').html('Simpan');
+    }).on('click','#sv-done', function(){
+        var url = '',
+            method = '';
+
+        var form = $('#form-done'),
+            data = form.serializeArray();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+        $.ajax({
+            url: "{{route('schedule.done')}}",
+            method: "POST",
+            data: data,
+            beforeSend: function() {
+                $("#sv-done").replaceWith(`
+                    <button class="btn btn-primary" type="button" id="loading-done" disabled="">
+                        <span class="spinner-border spinner-border-sm" schedule="status" aria-hidden="true"></span>
+                        Loading...
+                    </button>
+                `)
+            },
+            success: function(result) {
+                if (result.success) {
+                    successMsg(result.success)
+                    $('#modal-done').modal('hide');
+                    $('#form-done').find('input').val('');
+                    $('#datatable').DataTable().ajax.reload();
+                    $("#loading-done").replaceWith(`
+                        <button type="submit" id="sv-done" class="btn btn-primary">Simpan</button>
+                    `);
+                } else {
+                    errorMsg(result.errors)
+                    $("#loading-done").replaceWith(`
+                        <button type="submit" id="sv-done" class="btn btn-primary">Simpan</button>
+                    `);
+                }
+
+            },
         });
     });
 </script>
