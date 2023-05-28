@@ -45,3 +45,5 @@ Route::get('/schedule/done', [ScheduleController::class, 'done'])->name('schedul
 
 // activity (progres)
 Route::get('/activity', [ActivityController::class, 'index'])->name('activity');
+Route::post('/activity', [ActivityController::class, 'store'])->name('activity.store');
+Route::get('/list-activity/{id}', [ActivityController::class, 'listactivity'])->name('list-activity');

@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-schedule" tabindex="-1">
+<div class="modal fade" id="modal-activity" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,38 +6,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="row g-3" id="form-schedule">
+                <form class="row g-3" id="form-activity">
                     @csrf
-                    <input type="hidden" name="id" id="id">
-                    <div class="form-floating mb-2 selectIngProject">
-                        <select class="form-select" id="floatingSelect" aria-label="Project" name="project_id">
-                            <option value="" selected>-- Pilih Project --</option>
-                            @foreach ($projects as $project)
-                            <option value="{{$project->id}}">{{$project->project}}</option>
-                            @endforeach
-                        </select>
-                        <label for="floatingSelect">Project</label>
-                    </div>
+                    <input type="hidden" name="schedule_id" id="schedule_id">
                     <div class="col-md-12">
                         <div class="form-floating">
-                            <input type="date" class="form-control" id="start_date" name="start_date" placeholder="Tanggal Mulai">
-                            <label for="start_date">Tanggal Mulai</label>
+                            <input type="text" class="form-control" id="activity" name="activity" placeholder="Progres">
+                            <label for="activity">Progres</label>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-floating">
-                            <input type="date" class="form-control" id="due_date" name="due_date" placeholder="Deadline">
-                            <label for="due_date">Deadline</label>
-                        </div>
-                    </div>
-                    <div class="form-floating mb-2 selectIngUser">
-                        <select class="form-select" id="floatingSelect" aria-label="Engineer" name="user_id">
-                            <option value="" selected>-- Pilih Engineer --</option>
-                            @foreach ($users as $users)
-                            <option value="{{$users->id}}">{{$users->name}}</option>
-                            @endforeach
-                        </select>
-                        <label for="floatingSelect">Engineer</label>
                     </div>
             </div>
             <div class="modal-footer">

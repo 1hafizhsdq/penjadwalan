@@ -35,4 +35,8 @@ class Schedule extends Model
     public function project(){
         return $this->belongsTo(Project::class,'project_id');
     }
+    
+    public function activity(){
+        return $this->hasMany(Activity::class,'schedule_id');
+    }
 }

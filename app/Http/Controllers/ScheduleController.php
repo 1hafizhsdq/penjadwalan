@@ -28,7 +28,7 @@ class ScheduleController extends Controller
             if($data->status == null){
                 return '
                     <a href="javascript:void(0)" id="btn-edit" class="btn btn-sm btn-warning" data-id="' .$data->id .'" title="Edit Data"><i class="bi bi-pencil-fill"></i></a>
-                    <a href="/activity?id='.$data->id.'" id="btn-activity" class="btn btn-sm btn-primary" data-id="' .$data->id .'" title="Progres Data"><i class="bi bi-eye"></i></a>
+                    <a href="/activity?sch='.$data->id.'" id="btn-activity" class="btn btn-sm btn-primary" data-id="' .$data->id .'" title="Progres Data"><i class="bi bi-eye"></i></a>
                     <a href="javascript:void(0)" id="btn-done" class="btn btn-sm btn-success" data-id="' .$data->id .'" title="Selesaikan Pekerjaan"><i class="bi bi-check"></i></a>
                 ';
             }else{
