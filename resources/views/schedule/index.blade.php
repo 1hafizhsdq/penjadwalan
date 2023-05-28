@@ -130,26 +130,18 @@
                 $('#sv').html('Update');
             }
         });
+    }).on('click','#btn-done', function(){
+        var id = $(this).data('id');
+        $.ajax({
+            url : 'schedule/done',
+            type: 'GET',
+            data: {id:id},
+            success:function(result){
+                $('#datatable').DataTable().ajax.reload();
+                successMsg(result.success)
+            }
+        });
     });
-
-    // function editData(id) {
-    //     var form = $('#form-schedule');
-    //     $.ajax({
-    //         url : 'schedule/edit',
-    //         type: 'GET',
-    //         date: id,
-    //         success:function(result){
-    //             form.find('#id').val(result[0].id)
-    //             form.find('#project_id').val(result[0].project_id)
-    //             form.find('#start_date').val(result[0].start_date)
-    //             form.find('#due_date').val(result[0].due_date)
-    //             form.find('#user_id').val(result[0].user_id)
-    //             $('#modal-schedule').modal('show');
-    //             $('.modal-title').html('Form Edit Jadwal Pekerjaan');
-    //             $('#sv').html('Update');
-    //         }
-    //     });
-    // }
 
     function deleteData(id) {
         Swal.fire({

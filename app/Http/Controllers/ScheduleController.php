@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Schedule;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,13 +21,32 @@ class ScheduleController extends Controller
     }
 
     public function listSchedule(){
-        $data = Schedule::with('project','user')->get();
+        $data = Schedule::with('project','user')->orderBy('start_date','desc')->get();
         return DataTables::of($data)
         ->addIndexColumn()
         ->addColumn('aksi', function ($data) {
-            return '
-                <a href="javascript:void(0)" id="btn-edit" class="btn btn-sm btn-warning" data-id="' .$data->id .'" title="Edit Data"><i class="bi bi-pencil-fill"></i></a>
-            ';
+            if($data->status == null){
+                return '
+                    <a href="javascript:void(0)" id="btn-edit" class="btn btn-sm btn-warning" data-id="' .$data->id .'" title="Edit Data"><i class="bi bi-pencil-fill"></i></a>
+                    <a href="/activity?id='.$data->id.'" id="btn-activity" class="btn btn-sm btn-primary" data-id="' .$data->id .'" title="Progres Data"><i class="bi bi-eye"></i></a>
+                    <a href="javascript:void(0)" id="btn-done" class="btn btn-sm btn-success" data-id="' .$data->id .'" title="Selesaikan Pekerjaan"><i class="bi bi-check"></i></a>
+                ';
+            }else{
+                return $data->status;
+            }
+        })
+        ->editColumn('start_date', function($data){
+            return Carbon::parse($data->start_date)->isoFormat('D MMMM Y');
+        })
+        ->editColumn('due_date', function($data){
+            return Carbon::parse($data->due_date)->isoFormat('D MMMM Y');
+        })
+        ->editColumn('end_date', function($data){
+            if($data->end_date == null){
+                return '';
+            }else{
+                return Carbon::parse($data->end_date)->isoFormat('D MMMM Y');
+            }
         })
         ->rawColumns(['aksi'])
         ->make(true);
@@ -71,5 +91,11 @@ class ScheduleController extends Controller
     {
         $data = Schedule::find($request->id);
         return response()->json($data);
+    }
+
+    public function done(Request $request)
+    {
+        $data = Schedule::find($request->id)->update(['status' => 'SELESAI']);
+        return response()->json([ 'success' => 'Berhasil menyimpan data.']);
     }
 }

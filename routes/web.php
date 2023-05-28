@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
@@ -40,3 +41,7 @@ Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule');
 Route::get('/schedule/edit', [ScheduleController::class, 'edit'])->name('schedule.edit');
 Route::get('/list-schedule', [ScheduleController::class, 'listschedule'])->name('list-schedule');
 Route::post('/schedule', [ScheduleController::class, 'store'])->name('schedule.store');
+Route::get('/schedule/done', [ScheduleController::class, 'done'])->name('schedule.done');
+
+// activity (progres)
+Route::get('/activity', [ActivityController::class, 'index'])->name('activity');
