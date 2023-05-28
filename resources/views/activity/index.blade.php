@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-body">
                     <input type="hidden" name="uuid_schedule" id="uuid_schedule" value="{{ $schedule->id }}">
-                    <table class="mt-3">
+                    <table class="mt-3 mb-3">
                         <tr>
                             <td><b>Project</b></td>
                             <td>&emsp;:</td>
@@ -30,8 +30,17 @@
                             <td>&emsp;:</td>
                             <td>{{ $schedule->due_date}}</td>
                         </tr>
+                        @if ($schedule->status == null)
+                            <tr>
+                                <td><b>Tanggal Selesai</b></td>
+                                <td>&emsp;:</td>
+                                <td>{{ $schedule->end_date}}</td>
+                            </tr>
+                        @endif
                     </table>
-                    <button type="button" class="btn btn-primary mt-4 mb-4" id="add"><i class="bi bi-plus"></i> Tambah Aktivitas Progress</button>
+                    @if ($schedule->status == null)
+                        <button type="button" class="btn btn-primary mt-4 mb-4" id="add"><i class="bi bi-plus"></i> Tambah Aktivitas Progress</button>
+                    @endif
                     <table class="table" id="datatable">
                         <thead>
                             <tr>

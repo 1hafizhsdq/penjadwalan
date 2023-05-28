@@ -32,6 +32,18 @@ class ScheduleController extends Controller
                     <a href="javascript:void(0)" id="btn-done" class="btn btn-sm btn-success" data-id="' .$data->id .'" title="Selesaikan Pekerjaan"><i class="bi bi-check"></i></a>
                 ';
             }else{
+                return '
+                    <a href="javascript:void(0)" class="btn btn-sm btn-success" title="Selesaikan Pekerjaan">'.$data->status.'</a>
+                    <a href="/activity?sch='.$data->id.'" id="btn-activity" class="btn btn-sm btn-primary" data-id="' .$data->id .'" title="Progres Data"><i class="bi bi-eye"></i></a>
+                ';
+            }
+        })
+        ->addColumn('project', function ($data) {
+            if($data->status == null){
+                return '
+                    <a href="/activity?sch='.$data->id.'" id="btn-activity" class="" data-id="' .$data->id .'" title="Progres Data">'.$data->project->project.'</a>
+                ';
+            }else{
                 return $data->status;
             }
         })
@@ -48,7 +60,7 @@ class ScheduleController extends Controller
                 return Carbon::parse($data->end_date)->isoFormat('D MMMM Y');
             }
         })
-        ->rawColumns(['aksi'])
+        ->rawColumns(['aksi','project'])
         ->make(true);
     }
 
@@ -95,7 +107,7 @@ class ScheduleController extends Controller
 
     public function done(Request $request)
     {
-        $data = Schedule::find($request->id)->update(['status' => 'SELESAI']);
+        $data = Schedule::find($request->id)->update(['status' => 'SELESAI', 'end_date' => date('Y-m-d')]);
         return response()->json([ 'success' => 'Berhasil menyimpan data.']);
     }
 }

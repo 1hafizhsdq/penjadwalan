@@ -51,7 +51,7 @@
         },
         columns: [
             { data: 'DT_RowIndex', class: 'text-center'},
-            { data: 'project.project'},
+            { data: 'project'},
             { data: 'start_date'},
             { data: 'due_date'},
             { data: 'end_date'},
