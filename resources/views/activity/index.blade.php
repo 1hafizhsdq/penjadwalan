@@ -142,5 +142,36 @@
             }
         });
     });
+
+    function deleteData(id) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Apakah anda yakin akan menghapus data ini?',
+            showCancelButton: true,
+            confirmButtonText: 'Hapus',
+            confirmButtonColor: '#d3455b',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "schedule/" + id,
+                    method: 'DELETE',
+                    success: function(result) {
+                        if (result.success) {
+                            successMsg(result.success)
+                            $('#datatable').DataTable().ajax.reload();
+                        } else {
+                            errorMsg(result.errors)
+                        }
+                    }
+                });
+            }
+        });
+    }
 </script>
 @endpush
