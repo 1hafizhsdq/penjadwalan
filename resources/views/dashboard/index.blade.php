@@ -62,8 +62,10 @@
         $('#calendar').fullCalendar({
             timeZone: 'local',
             defaultDate: new Date(),
-            editable: true,
-            eventLimit: true,
+            events: @json($events),
+            eventClick: function(event) {
+                window.open('/activity?sch='+event.id, '_blank'); 
+            },
         });
     });
 </script>

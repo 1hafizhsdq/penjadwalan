@@ -30,8 +30,40 @@ class HomeController extends Controller
         if(Auth::user()->role_id != 1){
             $jmlPekerjaan = $jmlPekerjaan->where('user_id',Auth::user()->id);
         }
+        $schedule = [];
+        $sch = Schedule::with('project')->whereNull('status')->get();
+        foreach($sch as $s){
+            $color = null;
+            $end = null;
+            if(strtotime(date('Y-m-d')) > strtotime($s->due_date)){
+                $color = '#E1573A';
+                $end = date('Y-m-d');
+            }else{
+                $color = '#30CF57';
+                $end = $s->due_date;
+            }
+
+            $schedule[] = [
+                'id' => $s->id,
+                'title' => $s->project->project,
+                'start' => $s->start_date,
+                'end' => $end,
+                'color' => $color,
+            ];
+        }
+        $data['events'] = $schedule;
         $data['jmlPekerjaan'] = $jmlPekerjaan->first();
 
         return view('dashboard.index', $data);
+    }
+
+    public function schedule(){
+        $data = Schedule::with('project')->whereNull('status');
+        if(Auth::user()->role_id != 1){
+            $data = $data->where('user_id',Auth::user()->id);
+        }
+        $data = $data->get();
+
+        return response()->json($data);
     }
 }
