@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -25,7 +26,11 @@ class HomeController extends Controller
     public function index()
     {
         $data['title'] = 'Dashboard';
-        $data['jmlPekerjaan'] = Schedule::selectRaw('COUNT(CASE WHEN status = "SELESAI" THEN 1 END) AS selesai')->selectRaw('COUNT(CASE WHEN status is null THEN 1 END) AS berjalan')->first();
+        $jmlPekerjaan = Schedule::selectRaw('COUNT(CASE WHEN status = "SELESAI" THEN 1 END) AS selesai')->selectRaw('COUNT(CASE WHEN status is null THEN 1 END) AS berjalan');
+        if(Auth::user()->role_id != 1){
+            $jmlPekerjaan = $jmlPekerjaan->where('user_id',Auth::user()->id);
+        }
+        $data['jmlPekerjaan'] = $jmlPekerjaan->first();
 
         return view('dashboard.index', $data);
     }
