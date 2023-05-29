@@ -17,7 +17,7 @@
                             <i class="bi bi-alarm"></i>
                         </div>
                         <div class="ps-3">
-                            <h2>3 Project</h2>
+                            <h2>{{ $jmlPekerjaan->berjalan }} Project</h2>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                             <i class="bi bi-check2-circle"></i>
                         </div>
                         <div class="ps-3">
-                            <h2>1 Project</h2>
+                            <h2>{{ $jmlPekerjaan->selesai }} Project</h2>
                         </div>
                     </div>
                 </div>
