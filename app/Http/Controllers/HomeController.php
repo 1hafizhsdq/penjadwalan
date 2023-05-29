@@ -30,8 +30,14 @@ class HomeController extends Controller
         if(Auth::user()->role_id != 1){
             $jmlPekerjaan = $jmlPekerjaan->where('user_id',Auth::user()->id);
         }
+        $data['jmlPekerjaan'] = $jmlPekerjaan->first();
+
         $schedule = [];
-        $sch = Schedule::with('project')->whereNull('status')->get();
+        $sch = Schedule::with('project')->whereNull('status');
+        if(Auth::user()->role_id != 1){
+            $sch = $sch->where('user_id',Auth::user()->id);
+        }
+        $sch = $sch->get();
         foreach($sch as $s){
             $color = null;
             $end = null;
@@ -52,7 +58,6 @@ class HomeController extends Controller
             ];
         }
         $data['events'] = $schedule;
-        $data['jmlPekerjaan'] = $jmlPekerjaan->first();
 
         return view('dashboard.index', $data);
     }
