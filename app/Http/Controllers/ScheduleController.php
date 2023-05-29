@@ -51,7 +51,7 @@ class ScheduleController extends Controller
                     <a href="/activity?sch='.$data->id.'" id="btn-activity" class="" data-id="' .$data->id .'" title="Progres Data">'.$data->project->project.'</a>
                 ';
             }else{
-                return $data->status;
+                return $data->project->project;
             }
         })
         ->editColumn('start_date', function($data){
