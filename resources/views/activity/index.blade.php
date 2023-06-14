@@ -84,49 +84,66 @@
             $('#schedule_id').val($('#uuid_schedule').val());
             $('#sv').html('Simpan');
         });
+        var i = 0;
+        $('#addFoto').click(function(){
+            ++i;
+            $('#dynamicFile').append(`
+                <div class="input-group mb-3">
+                    <input class="form-control" type="file" id="file" accept="jpg,jpeg,png" name="file[`+i+`]">
+                    <span class="input-group-text" id="basic-addon1">
+                        <a class="rmvFoto"><i class="bi bi-trash-fill text-danger"></i></a>
+                    </span>
+                </div>
+            `)
+        });
     }).on('click','#sv', function(){
         var id = $('#id').val(),
             url = '',
             method = '';
 
-        var form = $('#form-activity'),
-            data = form.serializeArray();
+        // var form = $('#form-activity'),
+        //     data = form.serializeArray();
+        e.preventDefault(); // Mencegah aksi default pengiriman form
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: "{{route('activity.store')}}",
-            method: "POST",
-            data: data,
-            beforeSend: function() {
-                $("#sv").replaceWith(`
-                    <button class="btn btn-primary" type="button" id="loading" disabled="">
-                        <span class="spinner-border spinner-border-sm" schedule="status" aria-hidden="true"></span>
-                        Loading...
-                    </button>
-                `)
-            },
-            success: function(result) {
-                if (result.success) {
-                    successMsg(result.success)
-                    $('#modal-activity').modal('hide');
-                    $('#form-activity').find('input').val('');
-                    $('#datatable').DataTable().ajax.reload();
-                    $("#loading").replaceWith(`
-                        <button type="submit" id="sv" class="btn btn-primary">Simpan</button>
-                    `);
-                } else {
-                    errorMsg(result.errors)
-                    $("#loading").replaceWith(`
-                        <button type="submit" id="sv" class="btn btn-primary">Simpan</button>
-                    `);
-                }
+        var data = new FormData($('#form-activity'));
+        console.log(data);
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
+        // $.ajax({
+        //     url: "{{route('activity.store')}}",
+        //     method: "POST",
+        //     data: data,
+        //     beforeSend: function() {
+        //         $("#sv").replaceWith(`
+        //             <button class="btn btn-primary" type="button" id="loading" disabled="">
+        //                 <span class="spinner-border spinner-border-sm" schedule="status" aria-hidden="true"></span>
+        //                 Loading...
+        //             </button>
+        //         `)
+        //     },
+        //     success: function(result) {
+        //         if (result.success) {
+        //             successMsg(result.success)
+        //             $('#modal-activity').modal('hide');
+        //             $('#form-activity').find('input').val('');
+        //             $('#datatable').DataTable().ajax.reload();
+        //             $("#loading").replaceWith(`
+        //                 <button type="submit" id="sv" class="btn btn-primary">Simpan</button>
+        //             `);
+        //         } else {
+        //             errorMsg(result.errors)
+        //             $("#loading").replaceWith(`
+        //                 <button type="submit" id="sv" class="btn btn-primary">Simpan</button>
+        //             `);
+        //         }
 
-            },
-        });
+        //     },
+        // });
+    }).on('click','.rmvFoto', function(){
+        $(this).closest('.input-group').remove();
     });
 </script>
 @endpush

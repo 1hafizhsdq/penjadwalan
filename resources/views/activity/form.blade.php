@@ -15,6 +15,10 @@
                             <label for="activity">Progres</label>
                         </div>
                     </div>
+                    <div class="col-md-12" id="dynamicFile">
+                        <label for="foto">Foto</label><br>
+                        <a id="addFoto" class="btn btn-primary mb-2"><i class="bi bi-plus-square"></i> Tambah Foto</a>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

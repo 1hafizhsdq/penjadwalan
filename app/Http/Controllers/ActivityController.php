@@ -30,6 +30,7 @@ class ActivityController extends Controller
     }
 
     public function store(Request $request){
+        dd($request->all());
         Activity::create([
             'schedule_id' => $request->schedule_id,
             'activity' => $request->activity,
