@@ -47,6 +47,8 @@
                                 <th scope="col" width="10%">#</th>
                                 <th scope="col">Tanggal</th>
                                 <th scope="col">Aktivitas Progres</th>
+                                <th scope="col">Prosentase</th>
+                                <th scope="col">Foto</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,6 +75,8 @@
             { data: 'DT_RowIndex', class: 'text-center'},
             { data: 'tgl'},
             { data: 'activity'},
+            { data: 'progres'},
+            { data: 'foto'},
         ]
     });
 
@@ -89,61 +93,64 @@
             ++i;
             $('#dynamicFile').append(`
                 <div class="input-group mb-3">
-                    <input class="form-control" type="file" id="file" accept="jpg,jpeg,png" name="file[`+i+`]">
+                    <input class="form-control imgFile" type="file" id="file" accept="jpg,jpeg,png" name="files[`+i+`]">
                     <span class="input-group-text" id="basic-addon1">
                         <a class="rmvFoto"><i class="bi bi-trash-fill text-danger"></i></a>
                     </span>
                 </div>
             `)
         });
+
     }).on('click','#sv', function(){
-        var id = $('#id').val(),
-            url = '',
-            method = '';
-
-        // var form = $('#form-activity'),
-        //     data = form.serializeArray();
-        e.preventDefault(); // Mencegah aksi default pengiriman form
-
-        var data = new FormData($('#form-activity'));
-        console.log(data);
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        // });
-        // $.ajax({
-        //     url: "{{route('activity.store')}}",
-        //     method: "POST",
-        //     data: data,
-        //     beforeSend: function() {
-        //         $("#sv").replaceWith(`
-        //             <button class="btn btn-primary" type="button" id="loading" disabled="">
-        //                 <span class="spinner-border spinner-border-sm" schedule="status" aria-hidden="true"></span>
-        //                 Loading...
-        //             </button>
-        //         `)
-        //     },
-        //     success: function(result) {
-        //         if (result.success) {
-        //             successMsg(result.success)
-        //             $('#modal-activity').modal('hide');
-        //             $('#form-activity').find('input').val('');
-        //             $('#datatable').DataTable().ajax.reload();
-        //             $("#loading").replaceWith(`
-        //                 <button type="submit" id="sv" class="btn btn-primary">Simpan</button>
-        //             `);
-        //         } else {
-        //             errorMsg(result.errors)
-        //             $("#loading").replaceWith(`
-        //                 <button type="submit" id="sv" class="btn btn-primary">Simpan</button>
-        //             `);
-        //         }
-
-        //     },
-        // });
+        var formData = new FormData($('#form-activity')[0]);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{route('activity.store')}}",
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function() {
+                $("#sv").replaceWith(`
+                    <button class="btn btn-primary" type="button" id="loading" disabled="">
+                        <span class="spinner-border spinner-border-sm" schedule="status" aria-hidden="true"></span>
+                        Loading...
+                    </button>
+                `)
+            },
+            success: function(result) {
+                if (result.success) {
+                    successMsg(result.success)
+                    $('#modal-activity').modal('hide');
+                    $('#form-activity').find('input').val('');
+                    $('#datatable').DataTable().ajax.reload();
+                    $("#loading").replaceWith(`
+                        <button type="submit" id="sv" class="btn btn-primary">Simpan</button>
+                    `);
+                } else {
+                    errorMsg(result.errors)
+                    $("#loading").replaceWith(`
+                        <button type="submit" id="sv" class="btn btn-primary">Simpan</button>
+                    `);
+                }
+            }
+        });
     }).on('click','.rmvFoto', function(){
         $(this).closest('.input-group').remove();
+    });
+
+    const textInput = document.getElementById('progres');
+    textInput.addEventListener('input', (event) => {
+        const inputValue = event.target.value;
+        const numericValue = inputValue.replace(/\D/g, ''); // Hanya menyisakan angka
+
+        if (inputValue !== numericValue) {
+        textInput.value = numericValue;
+        }
     });
 </script>
 @endpush
