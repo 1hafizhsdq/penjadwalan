@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/activity', [ActivityController::class, 'index'])->name('activity');
     Route::post('/activity', [ActivityController::class, 'store'])->name('activity.store');
     Route::get('/list-activity/{id}', [ActivityController::class, 'listactivity'])->name('list-activity');
+    Route::get('/show-foto', [ActivityController::class, 'showFoto'])->name('show-foto');
 
     Route::middleware(['role:1'])->group(function () {
         // master user

@@ -31,7 +31,7 @@ class ActivityController extends Controller
             return $data->progres.'%';
         })
         ->addColumn('foto', function($data){
-            return '<a id="'.$data->id.'"><i class="bi bi-card-image"></i></a>';
+            return '<a class="showFoto" data-id="'.$data->id.'"><i class="bi bi-card-image"></i></a>';
         })
         ->rawColumns(['foto'])
         ->make(true);
@@ -68,5 +68,11 @@ class ActivityController extends Controller
             'foto' => json_encode($foto),
         ]);
         return response()->json([ 'success' => 'Berhasil menyimpan data.']);
+    }
+
+    public function showFoto(Request $request){
+        $activity = Activity::where('id',$request->id)->first();
+        $data = json_decode($activity->foto,true);
+        return response()->json($data);
     }
 }
