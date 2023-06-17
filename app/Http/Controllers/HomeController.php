@@ -26,7 +26,9 @@ class HomeController extends Controller
     public function index()
     {
         $data['title'] = 'Dashboard';
-        $jmlPekerjaan = Schedule::selectRaw('COUNT(CASE WHEN status = "SELESAI" THEN 1 END) AS selesai')->selectRaw('COUNT(CASE WHEN status is null THEN 1 END) AS berjalan');
+        $jmlPekerjaan = Schedule::selectRaw('COUNT(CASE WHEN status = "SELESAI" THEN 1 END) AS selesai')
+                        ->selectRaw('COUNT(CASE WHEN status is null THEN 1 END) AS berjalan')
+                        ->selectRaw('COUNT(CASE WHEN status_urgent = "URGENT" AND status is null THEN 1 END) AS urgent');
         if(Auth::user()->role_id != 1){
             $jmlPekerjaan = $jmlPekerjaan->where('user_id',Auth::user()->id);
         }

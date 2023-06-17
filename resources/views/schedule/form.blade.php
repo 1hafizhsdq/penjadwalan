@@ -39,6 +39,13 @@
                         </select>
                         <label for="floatingSelect">Engineer</label>
                     </div>
+                    <div class="form-floating mb-2 selectIngStatusUrgent">
+                        <select class="form-select" id="floatingSelect" aria-label="Status Urgent" name="status_urgent">
+                            <option value="BIASA">BIASA</option>
+                            <option value="URGENT">URGENT</option>
+                        </select>
+                        <label for="floatingSelect">Status Urgent</label>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

@@ -54,6 +54,9 @@ class ScheduleController extends Controller
                 return $data->project->project;
             }
         })
+        ->editColumn('status_urgent', function($data){
+            return ($data->status_urgent) ? $data->status_urgent : 'BIASA';
+        })
         ->editColumn('start_date', function($data){
             return Carbon::parse($data->start_date)->isoFormat('D MMMM Y');
         })
@@ -93,6 +96,7 @@ class ScheduleController extends Controller
                     'due_date' => $request->due_date,
                     'user_id' => $request->user_id,
                     'project_id' => $request->project_id,
+                    'status_urgent' => $request->status_urgent,
                 ]);
             }else{
                 Schedule::where('id',$request->id)->update([
@@ -100,6 +104,7 @@ class ScheduleController extends Controller
                     'due_date' => $request->due_date,
                     'user_id' => $request->user_id,
                     'project_id' => $request->project_id,
+                    'status_urgent' => $request->status_urgent,
                 ]);
             }
             return response()->json([ 'success' => 'Berhasil menyimpan data.']);

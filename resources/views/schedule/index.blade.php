@@ -21,6 +21,7 @@
                             <tr>
                                 <th scope="col" width="10%">#</th>
                                 <th scope="col">Project</th>
+                                <th scope="col">Status Urgent</th>
                                 <th scope="col">Tanggal Mulai</th>
                                 <th scope="col">Deadline</th>
                                 <th scope="col">Tanggal Selesai</th>
@@ -54,6 +55,7 @@
         columns: [
             { data: 'DT_RowIndex', class: 'text-center'},
             { data: 'project'},
+            { data: 'status_urgent'},
             { data: 'start_date'},
             { data: 'due_date'},
             { data: 'end_date'},
@@ -124,6 +126,7 @@
                 form.find('#id').val(result.id)
                 $("div.selectIngProject select").val(result.project_id).change();
                 $("div.selectIngUser select").val(result.user_id).change();
+                $("div.selectIngStatusUrgent select").val(result.status_urgent).change();
                 form.find('#start_date').val(result.start_date)
                 form.find('#due_date').val(result.due_date)
                 $('#modal-schedule').modal('show');
