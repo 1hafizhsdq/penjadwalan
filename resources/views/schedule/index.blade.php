@@ -2,6 +2,18 @@
 
 @section('title', $title)
 
+@push('css')
+<link href="{{ asset('select2') }}/dist/css/select2.css" rel="stylesheet" />
+<style>
+    .select2-container--default .select2-selection--single {
+        height: calc(3.5rem + 2px);
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 68px; 
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="pagetitle">
     <h1>{{ $title }}</h1>
@@ -13,6 +25,73 @@
 
             <div class="card">
                 <div class="card-body p-3">
+
+                    <form id="form-filter-schedule" method="post">
+                        @csrf
+                        <div class="row">
+                            <label for="floatingSelect">Filter</label>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-floating mb-2 selectIng">
+                                    <select class="form-select select2" id="filter_project" aria-label="filter_project" name="filter_project">
+                                        <option value="" selected>-- Pilih Project --</option>
+                                        @foreach ($projects as $p)
+                                            <option value="{{ $p->id }}">{{ $p->project }}</option>
+                                        @endforeach
+                                    </select>
+                                    <label for="floatingSelect">Project</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-floating mb-2 selectIng">
+                                    <select class="form-select select2" id="filter_engineer" aria-label="filter_engineer" name="filter_engineer">
+                                        <option value="" selected>-- Pilih Engineer --</option>
+                                        @foreach ($users as $e)
+                                        <option value="{{ $e->id }}">{{ $e->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <label for="floatingSelect">Engineer</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-floating mb-2 selectIng">
+                                    <select class="form-select" id="filter_status_urgent" aria-label="filter_status_urgent" name="filter_status_urgent">
+                                        <option value="" selected>-- Pilih Status Urgent --</option>
+                                        <option value="BIASA">BIASA</option>
+                                        <option value="URGENT">URGENT</option>
+                                    </select>
+                                    <label for="floatingSelect">Status Urgent</label>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="row">
+                            <label for="floatingSelect">Sort</label>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-floating mb-2 selectIng">
+                                    <select class="form-select" id="sort" aria-label="Sort" name="sort">
+                                        <option value="">-- Pilih Sort --</option>
+                                        <option value="project_id">Project</option>
+                                        <option value="status_urgent">Status Urgent</option>
+                                        <option value="start_date">Tanggal Mulai</option>
+                                        <option value="due_date">Deadline</option>
+                                        <option value="end_date">Tanggal Selesai</option>
+                                        <option value="user_id">Engineer</option>
+                                    </select>
+                                    <label for="floatingSelect">Sort Berdasarkan</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-floating mb-2 selectIng">
+                                    <select class="form-select" id="sort_type" aria-label="Sort" name="sort_type">
+                                        <option value="asc" selected>A to Z</option>
+                                        <option value="desc">Z to A</option>
+                                    </select>
+                                    <label for="floatingSelect">Ascending Descending</label>
+                                </div>
+                            </div>
+                        </div> --}}
+                        <a class="btn btn-primary mt-4 mb-4" id="filter"><i class="bi bi-search"></i> Filter</a>
+                    </form>
+
                     @if (Auth::user()->role_id == 1)
                         <button type="button" class="btn btn-primary mt-4 mb-4" id="add"><i class="bi bi-plus"></i> Tambah Schedule</button>
                     @endif
@@ -44,7 +123,14 @@
 @endsection
 
 @push('script')
+<script src="{{ asset('select2') }}/dist/js/select2.min.js"></script>
 <script>
+    $('.select2').select2();
+    $('.select2-modal').select2({
+            dropdownParent: $("#modal-schedule"),
+            width: '100%',
+            multiple: false,
+        });
     $('#datatable').DataTable({
         responsive: true,
         processing: true,
@@ -62,10 +148,45 @@
             { data: 'user.name'},
             { data: 'information'},
             { data: 'aksi', class: 'text-center'}
-        ]
+        ],
+        destroy:true
+    });
+
+    $('#filter').click(function(){
+        var form = $('#form-filter-schedule'),
+        data = form.serializeArray();
+        
+        $('#datatable').DataTable({
+            responsive: true,
+            processing: true,
+            serverSide: true,
+            paging: true,
+            scrollX: true,
+            ajax: {
+                url: '{{ route("list-schedule-filter") }}',
+                data:data
+            },
+            columns: [
+                { data: 'DT_RowIndex', class: 'text-center'},
+                { data: 'project'},
+                { data: 'status_urgent'},
+                { data: 'start_date'},
+                { data: 'due_date'},
+                { data: 'end_date'},
+                { data: 'user.name'},
+                { data: 'information'},
+                { data: 'aksi', class: 'text-center'}
+            ],
+            destroy:true
+        });
     });
 
     $(document).ready(function() {
+        // $('.select2-modal').select2({
+        //     dropdownParent: $("#modal-schedule"),
+        //     width: '100%',
+        //     multiple: false,
+        // });
         $('#add').click(function(){
             $('#form-schedule').find('input').val('');
             $('#modal-schedule').modal('show');

@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/schedule', [ScheduleController::class, 'index'])->name('schedule');
     Route::get('/schedule/edit', [ScheduleController::class, 'edit'])->name('schedule.edit');
     Route::get('/list-schedule', [ScheduleController::class, 'listschedule'])->name('list-schedule');
+    Route::get('/list-schedule-filter', [ScheduleController::class, 'listscheduleFilter'])->name('list-schedule-filter');
     Route::post('/schedule', [ScheduleController::class, 'store'])->name('schedule.store');
     Route::post('/schedule-done', [ScheduleController::class, 'done'])->name('schedule.done');
     

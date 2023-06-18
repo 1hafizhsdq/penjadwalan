@@ -10,7 +10,7 @@
                     @csrf
                     <input type="hidden" name="id" id="id">
                     <div class="form-floating mb-2 selectIngProject">
-                        <select class="form-select" id="floatingSelect" aria-label="Project" name="project_id">
+                        <select class="select2-modal form-select" id="project_id" aria-label="Project" name="project_id">
                             <option value="" selected>-- Pilih Project --</option>
                             @foreach ($projects as $project)
                             <option value="{{$project->id}}">{{$project->project}}</option>
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="form-floating mb-2 selectIngUser">
-                        <select class="form-select" id="floatingSelect" aria-label="Engineer" name="user_id">
+                        <select class="select2-modal form-select" id="user_id" aria-label="Engineer" name="user_id">
                             <option value="" selected>-- Pilih Engineer --</option>
                             @foreach ($users as $users)
                             <option value="{{$users->id}}">{{$users->name}}</option>

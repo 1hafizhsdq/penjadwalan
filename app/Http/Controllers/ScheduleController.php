@@ -74,6 +74,70 @@ class ScheduleController extends Controller
         ->make(true);
     }
 
+    public function listScheduleFilter(Request $request){
+        if(Auth::user()->role_id == 1){
+            $data = Schedule::with('project','user');
+        }else{
+            $data = Schedule::with('project','user')->where('user_id',Auth::user()->id);
+        }
+
+        if ($request[1]['value'] != '') {
+            $data = $data->where('project_id', $request[1]['value']);
+        }
+        if ($request[2]['value'] != '') {
+            $data = $data->where('user_id', $request[2]['value']);
+        }
+        if ($request[3]['value'] != '') {
+            $data = $data->where('status_urgent', $request[3]['value']);
+        }
+
+        $data = $data->orderBy('start_date','desc')->get();
+
+        return DataTables::of($data)
+        ->addIndexColumn()
+        ->addColumn('aksi', function ($data) {
+            if($data->status == null){
+                return '
+                    <a href="javascript:void(0)" id="btn-edit" class="btn btn-sm btn-warning" data-id="' .$data->id .'" title="Edit Data"><i class="bi bi-pencil-fill"></i></a>
+                    <a href="/activity?sch='.$data->id.'" id="btn-activity" class="btn btn-sm btn-primary" data-id="' .$data->id .'" title="Progres Data"><i class="bi bi-eye"></i></a>
+                    <a href="javascript:void(0)" id="btn-done" class="btn btn-sm btn-success" data-id="' .$data->id .'" title="Selesaikan Pekerjaan"><i class="bi bi-check"></i></a>
+                ';
+            }else{
+                return '
+                    <a href="javascript:void(0)" class="btn btn-sm btn-success" title="Selesaikan Pekerjaan">'.$data->status.'</a>
+                    <a href="/activity?sch='.$data->id.'" id="btn-activity" class="btn btn-sm btn-primary" data-id="' .$data->id .'" title="Progres Data"><i class="bi bi-eye"></i></a>
+                ';
+            }
+        })
+        ->addColumn('project', function ($data) {
+            if($data->status == null){
+                return '
+                    <a href="/activity?sch='.$data->id.'" id="btn-activity" class="" data-id="' .$data->id .'" title="Progres Data">'.$data->project->project.'</a>
+                ';
+            }else{
+                return $data->project->project;
+            }
+        })
+        ->editColumn('status_urgent', function($data){
+            return ($data->status_urgent) ? $data->status_urgent : 'BIASA';
+        })
+        ->editColumn('start_date', function($data){
+            return Carbon::parse($data->start_date)->isoFormat('D MMMM Y');
+        })
+        ->editColumn('due_date', function($data){
+            return Carbon::parse($data->due_date)->isoFormat('D MMMM Y');
+        })
+        ->editColumn('end_date', function($data){
+            if($data->end_date == null){
+                return '';
+            }else{
+                return Carbon::parse($data->end_date)->isoFormat('D MMMM Y');
+            }
+        })
+        ->rawColumns(['aksi','project'])
+        ->make(true);
+    }
+
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'start_date' => 'required',
