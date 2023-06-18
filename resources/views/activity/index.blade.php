@@ -167,7 +167,6 @@
                 $('#modal-foto').modal('show');
             }
         });
-        // $('#modal-foto').modal('show');
     });
 
     const textInput = document.getElementById('progres');
