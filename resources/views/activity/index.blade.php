@@ -159,7 +159,7 @@
                     var active = (key == 0) ? 'active' : '';
                     data +=`
                         <div class="carousel-item `+ active +`">
-                            <img src="/storage/progress/`+val+`" class="d-block w-100" alt="...">
+                            <img src="/progress/`+val+`" class="d-block w-100" alt="...">
                         </div>
                     `;
                 });

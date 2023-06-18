@@ -56,7 +56,8 @@ class ActivityController extends Controller
             foreach ($files as $file) {
                 $extension = $file->getClientOriginalExtension();
                 $newName = Str::random(40).'.'.$extension;
-                $file->storeAs('/public/progress', $newName);
+                // $file->storeAs('/public/progress', $newName);
+                $file->move("progress/", $newName);
                 $foto[] = $newName;
             }
         }
